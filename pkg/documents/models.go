@@ -1,5 +1,8 @@
 package documents
 
+import (
+	"time"
+)
 
 type Document struct {
 	ID        string    `json:"id"`
