@@ -1,11 +1,11 @@
-package documents
+package models
 
 import (
 	"time"
 )
 
 type Document struct {
-	ID        string    `json:"id"`
+	ID        string    `json:"id" gorm:"primaryKey"`
 	Title     string    `json:"title"`
 	Author    string    `json:"author"`
 	Content   string    `json:"content"`
