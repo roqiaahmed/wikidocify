@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
 	"github.com/roqiaahmed/wikidocify/initializers"
 	"github.com/roqiaahmed/wikidocify/pkg/models"
 	"github.com/stretchr/testify/assert"
@@ -37,9 +38,9 @@ func TestMain(m *testing.M) {
 }
 
 func TestCreateDocument(t *testing.T) {
-
+	id := uuid.New()
 	documentData := models.Document{
-		ID:        "1",
+		ID:        id,
 		Title:     "Test Document",
 		Author:    "Test Author",
 		Content:   "This is a test document.",
@@ -73,21 +74,21 @@ func TestGetAllDocuments(t *testing.T) {
 
 	documents := []models.Document{
 		{
-			ID:        "1",
+			ID:        uuid.New(),
 			Title:     "Test Document",
 			Author:    "Test Author",
 			Content:   "This is a test document.",
 			CreatedAt: time.Now(),
 			UpdatedAt: time.Now()},
 		{
-			ID:        "2",
+			ID:        uuid.New(),
 			Title:     "Test Document",
 			Author:    "Test Author",
 			Content:   "This is a test document.",
 			CreatedAt: time.Now(),
 			UpdatedAt: time.Now()},
 		{
-			ID:        "3",
+			ID:        uuid.New(),
 			Title:     "Test Document",
 			Author:    "Test Author",
 			Content:   "This is a test document.",
@@ -118,8 +119,9 @@ func TestGetAllDocuments(t *testing.T) {
 }
 
 func TestGetDocument(t *testing.T) {
+	id := uuid.New()
 	document := models.Document{
-		ID:        "1",
+		ID:        id,
 		Title:     "Test Document",
 		Author:    "Test Author",
 		Content:   "This is a test document.",
@@ -127,7 +129,7 @@ func TestGetDocument(t *testing.T) {
 		UpdatedAt: time.Now(),
 	}
 	initializers.DB.Create(&document)
-	req, _ := http.NewRequest("GET", "/documents/"+document.ID, nil)
+	req, _ := http.NewRequest("GET", "/documents/"+document.ID.String(), nil)
 	w := httptest.NewRecorder()
 	router.ServeHTTP(w, req)
 	assert.Equal(t, http.StatusOK, w.Code)
@@ -143,7 +145,7 @@ func TestGetDocument(t *testing.T) {
 
 func TestUpdateDocument(t *testing.T) {
 	oldDocument := models.Document{
-		ID:        "1",
+		ID:        uuid.New(),
 		Title:     "Test Document",
 		Author:    "Test Author",
 		Content:   "This is a test document.",
@@ -152,7 +154,7 @@ func TestUpdateDocument(t *testing.T) {
 	}
 	initializers.DB.Create(&oldDocument)
 	newDocument := models.Document{
-		ID:        "1",
+		ID:        uuid.New(),
 		Title:     "Updated Document",
 		Author:    "Updated Author",
 		Content:   "This is an updated test document.",
@@ -160,7 +162,7 @@ func TestUpdateDocument(t *testing.T) {
 		UpdatedAt: time.Now(),
 	}
 	body, _ := json.Marshal(newDocument)
-	req, _ := http.NewRequest("PUT", "/documents/"+oldDocument.ID, bytes.NewBuffer(body))
+	req, _ := http.NewRequest("PUT", "/documents/"+oldDocument.ID.String(), bytes.NewBuffer(body))
 	req.Header.Set("Content-Type", "application/json")
 	w := httptest.NewRecorder()
 	router.ServeHTTP(w, req)
@@ -178,7 +180,7 @@ func TestUpdateDocument(t *testing.T) {
 
 func TestDeleteDocument(t *testing.T) {
 	oldDocument := models.Document{
-		ID:        "1",
+		ID:        uuid.New(),
 		Title:     "Test Document",
 		Author:    "Test Author",
 		Content:   "This is a test document.",
@@ -186,7 +188,7 @@ func TestDeleteDocument(t *testing.T) {
 		UpdatedAt: time.Now(),
 	}
 	initializers.DB.Create(&oldDocument)
-	req, _ := http.NewRequest("DELETE", "/documents/"+oldDocument.ID, nil)
+	req, _ := http.NewRequest("DELETE", "/documents/"+oldDocument.ID.String(), nil)
 	w := httptest.NewRecorder()
 	router.ServeHTTP(w, req)
 	assert.Equal(t, http.StatusOK, w.Code)
